@@ -1,9 +1,12 @@
 import type { User } from '../../types/users'
 import { DeleteIcon, EditIcon } from '../../lib/icons'
 
-export default function UserList({ users }: { users: User[] }) {
-    return (
+export default function UserList(
+    {users, onDelete }: { users: User[];
+    onDelete: (userId: string) => void }
+){
 
+    return (
         <section className="user-list-card">
             <h2>Listado</h2>
             <ul className="user-list">
@@ -17,7 +20,7 @@ export default function UserList({ users }: { users: User[] }) {
                             <button className="btn-icon" aria-label={`Editar usuario ${user.name}`}>
                                 <EditIcon />
                             </button>
-                            <button className="btn-icon" aria-label={`Borrar usuario ${user.name}`}>
+                            <button className="btn-icon" aria-label={`Borrar usuario ${user.name}`} onClick={() => onDelete(user.id)}>
                                 <DeleteIcon />
                             </button>
                         </div>

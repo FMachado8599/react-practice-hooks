@@ -21,7 +21,7 @@ export default function App() {
     if (!form.name.trim() || !form.email.trim()) return;
 
     const newUser: User = {
-      id: users.length + 1,
+      id: `${Date.now()}`,
       name: form.name,
       email: form.email,
     };
@@ -29,6 +29,10 @@ export default function App() {
     setUsers((prev) => [...prev, newUser]);
     setForm({ name: '', email: '' });
 
+  }
+
+  function handleDelete(userId: string) {
+      setUsers((prev) => prev.filter((user) => user.id !== userId));
   }  
 
   return (
@@ -40,7 +44,7 @@ export default function App() {
 
       <UserForm form={form} handleChange={handleChange} handleSubmit={handleSubmit} />
       
-      <UserList users={users} />
+      <UserList users={users} onDelete={handleDelete} />
     </div>
   )
 }
