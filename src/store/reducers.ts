@@ -3,9 +3,6 @@ import type { History, Action } from '../types/users'
 
 export function historyReducer(state: History, action: Action): History {
 
-    const anterior = state.previous[state.previous.length - 1]
-    const nuevoPrevious = state.previous.slice(0, -1)
-
   switch (action.type) {
     case 'ADD_USER':
       return {
@@ -21,20 +18,30 @@ export function historyReducer(state: History, action: Action): History {
         current: state.current.filter((user) => user.id !== action.payload),
         next: [],
       };
-    case 'UNDO':
-        if (state.previous.length === 0) return state
+    case 'UNDO': {
+      if (state.previous.length === 0) return state
+
+      const anterior = state.previous[state.previous.length - 1]
+      const nuevoPrevious = state.previous.slice(0, -1)
+
       return {
-        ...state,
+        previous: nuevoPrevious,
+        current: anterior,
         next: [...state.next, state.current],
-        current: state.previous.pop() || [],
       };
-    case 'REDO':
-        if (state.next.length === 0) return state
+    }
+    case 'REDO': {
+      if (state.next.length === 0) return state
+
+      const siguiente = state.next[state.next.length - 1]
+      const nuevoNext = state.next.slice(0, -1)
+
       return {
-        ...state,
         previous: [...state.previous, state.current],
-        current: state.next.pop() || [],
+        current: siguiente,
+        next: nuevoNext,
       };
+    }
     default:
       return state;
   }
